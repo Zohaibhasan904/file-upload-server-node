@@ -64,7 +64,6 @@ exports.uploadMultipleFiles = (req, res) => {
       return res.status(400).send("No files selected!");
     }
 
-    
     // Process uploaded files
     const uploadedFileNames = req.files.map((file) => file.filename);
     res.status(200).send(`Files uploaded successfully: ${uploadedFileNames.join(', ')}`);
