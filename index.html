@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>File Upload Server (Multiple Files)</title>
+  <style>
+    body { font-family: sans-serif; margin: 20px; }
+    form { margin-top: 20px; }
+    input[type="file"] { margin-bottom: 10px; }
+    .message { margin-top: 20px; font-weight: bold; }
+    .success { color: green; }
+    .error { color: red; }
+    .warning { color: orange; }
+  </style>
+</head>
+<body>
+  <h1>Upload Multiple Files to Ubuntu Server</h1>
+
+  <form id="uploadForm">
+    <input type="file" name="myFiles" id="fileInput" multiple required />
+    <br>
+    <input type="submit" value="Upload Files" />
+  </form>
+
+  <div class="message" id="message"></div>
+
+  <script>
+    const uploadForm = document.getElementById('uploadForm');
+    const messageDiv = document.getElementById('message');
+
+    uploadForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      messageDiv.textContent = 'Uploading...';
+      messageDiv.className = 'message warning'; // Add a warning class
+
+      const formData = new FormData(uploadForm);
+
+      try {
+        // Ensure the fetch URL is correct (e.g., /upload if that's your route)
+        const response = await fetch('/upload', { // Assuming your route is still /upload
+          method: 'POST',
+          body: formData,
+        });
+
+        const text = await response.text();
+
+        if (response.ok) {
+          messageDiv.textContent = `✅ ${text}`;
+          messageDiv.className = 'message success';
+        } else {
+          messageDiv.textContent = `❌ ${text}`;
+          messageDiv.className = 'message error';
+        }
+      } catch (error) {
+        messageDiv.textContent = `⚠️ Network Error: ${error.message}`;
+        messageDiv.className = 'message error';
+        console.error('Upload error:', error);
+      }
+    });
+  </script>
+</body>
+</html>
